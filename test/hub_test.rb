@@ -394,6 +394,24 @@ class HubTest < Test::Unit::TestCase
     assert_output expected, "pull-request https://github.com/mojombo/hub/issues/92#comment_4"
   end
 
+  def test_pullrequest_explicit_title
+    stub_request(:post, "https://api.github.com/repos/defunkt/hub/pulls").
+      with(:body => {'base' => "feature", 'head' => "defunkt:master", 'title' => "This_is_a_title_of_pull_request" }).
+      to_return(:body => mock_pullreq_response(1))
+
+    expected = "https://github.com/defunkt/hub/pull/1\n"
+    assert_output expected, "pull-request hereyougo -b feature -t This_is_a_title_of_pull_request -f"
+  end
+
+  def test_pullrequest_explicit_body
+    stub_request(:post, "https://api.github.com/repos/defunkt/hub/pulls").
+      with(:body => {'base' => "feature", 'head' => "defunkt:master", 'title' => "hereyougo", 'body' => "This_is_a_body_of_pull_request" }).
+      to_return(:body => mock_pullreq_response(1))
+
+    expected = "https://github.com/defunkt/hub/pull/1\n"
+    assert_output expected, "pull-request hereyougo -b feature -B This_is_a_body_of_pull_request -f"
+  end
+
   def test_pullrequest_fails
     stub_request(:post, "https://api.github.com/repos/defunkt/hub/pulls").
       to_return(:status => [422, "Unprocessable Entity"],
