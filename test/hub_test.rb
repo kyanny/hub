@@ -499,7 +499,7 @@ class HubTest < Test::Unit::TestCase
     assert_equal expected, usage_help
 
     usage_help = hub("pull-request -h")
-    expected = "Usage: git pull-request [-f] [TITLE|-i ISSUE] [-b BASE] [-h HEAD]\n"
+    expected = "Usage: git pull-request [-f] [-t TITLE] [-B BODY] [TITLE|-i ISSUE] [-b BASE] [-h HEAD]\n"
     assert_equal expected, usage_help
   end
 
