@@ -93,3 +93,17 @@ Feature: hub pull-request
       """
     When I successfully run `hub pull-request mytitle -m mybody`
     Then the output should contain exactly "the://url\n"
+
+  Scenario: Read title and body from file
+    Given the "origin" remote has url "git://github.com/mislav/coral.git"
+    Given the GitHub API server:
+      """
+      post('/repos/mislav/coral/pulls') {
+        halt 422 if params[:title] != 'Title of pull request (sequential lines are squashed)'
+        halt 422 if params[:body] != "This is a body of content.\nMultiple lines are accepted.\n\nBlank line of body content is remained."
+        json :html_url => "the://url"
+      }
+      """
+    Given the title and body of pull request is saved to "msg.txt"
+    When I successfully run `hub pull-request -F msg.txt`
+    Then the output should contain exactly "the://url\n"

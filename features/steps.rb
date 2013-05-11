@@ -159,3 +159,19 @@ end
 Given /^the remote commit state of "(.*?)" "(.*?)" is nil$/ do |proj, ref|
   step %{the remote commit states of "#{proj}" "#{ref}" are:}, "[ ]"
 end
+
+Given /^the title and body of pull request is saved to "(.*?)"$/ do |file|
+  in_current_dir do
+    File.open(file, 'w') { |f|
+      f.puts <<MSG
+Title of pull request
+(sequential lines are squashed)
+
+This is a body of content.
+Multiple lines are accepted.
+
+Blank line of body content is remained.
+MSG
+    }
+  end
+end

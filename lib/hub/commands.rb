@@ -143,6 +143,8 @@ module Hub
           options[:issue] = args.shift
         when '-m'
           options[:body] = args.shift
+        when '-F'
+          options[:title], options[:body] = read_editmsg(args.shift)
         else
           if url = resolve_github_url(arg) and url.project_path =~ /^issues\/(\d+)/
             options[:issue] = $1
