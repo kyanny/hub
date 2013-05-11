@@ -1019,12 +1019,11 @@ help
 
     def read_editmsg(file)
       title, body = '', ''
-      File.open(file, 'r') { |msg|
-        msg.each_line do |line|
-          next if line.index('#') == 0
-          ((body.empty? and line =~ /\S/) ? title : body) << line
-        end
-      }
+      msg = (file == '-') ? $stdin : File.open(file, 'r')
+      msg.each_line do |line|
+        next if line.index('#') == 0
+        ((body.empty? and line =~ /\S/) ? title : body) << line
+      end
       title.tr!("\n", ' ')
       title.strip!
       body.strip!
