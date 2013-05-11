@@ -80,3 +80,16 @@ Feature: hub pull-request
       """
     When I successfully run `hub pull-request useragent`
     Then the output should contain exactly "the://url\n"
+
+  Scenario: With body content passed by argument
+    Given the "origin" remote has url "git://github.com/mislav/coral.git"
+    Given the GitHub API server:
+      """
+      post('/repos/mislav/coral/pulls') {
+        halt 422 if params[:title] != 'mytitle'
+        halt 422 if params[:body] != 'mybody'
+        json :html_url => "the://url"
+      }
+      """
+    When I successfully run `hub pull-request mytitle -m mybody`
+    Then the output should contain exactly "the://url\n"
